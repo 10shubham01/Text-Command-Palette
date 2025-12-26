@@ -190,18 +190,27 @@
         closePalette();
       }
     });
-
-    if (lastCommand) {
-      const index = COMMANDS.findIndex(c => c.id === lastCommand);
-      if (index !== -1) activeIndex = index;
-    }
   }
 
   function renderList(cmds, list) {
     list.innerHTML = "";
-    activeIndex = 0;
 
-    cmds.forEach(cmd => {
+    // Sort commands so last used command appears first
+    let sortedCmds = [...cmds];
+    if (lastCommand) {
+      const lastCmdIndex = sortedCmds.findIndex(c => c.id === lastCommand);
+      if (lastCmdIndex !== -1) {
+        const lastCmd = sortedCmds.splice(lastCmdIndex, 1)[0];
+        sortedCmds.unshift(lastCmd);
+        activeIndex = 0; // Last used command is now at index 0
+      } else {
+        activeIndex = 0;
+      }
+    } else {
+      activeIndex = 0;
+    }
+
+    sortedCmds.forEach(cmd => {
       const li = document.createElement("li");
       li.textContent = cmd.label;
       li.onclick = () => run(cmd);
@@ -215,7 +224,21 @@
     items.forEach((el, i) => {
       el.classList.toggle("active", i === activeIndex);
       if (i === activeIndex) {
-        el.scrollIntoView({ block: "nearest", inline: "nearest" });
+        // Scroll the list container to show the active item
+        const list = el.parentElement;
+        const itemTop = el.offsetTop;
+        const itemHeight = el.offsetHeight;
+        const listHeight = list.clientHeight;
+        const scrollTop = list.scrollTop;
+
+        // Check if item is above visible area
+        if (itemTop < scrollTop) {
+          list.scrollTop = itemTop;
+        }
+        // Check if item is below visible area
+        else if (itemTop + itemHeight > scrollTop + listHeight) {
+          list.scrollTop = itemTop + itemHeight - listHeight;
+        }
       }
     });
   }
@@ -236,26 +259,42 @@
       if (editableElement.tagName === 'INPUT' || editableElement.tagName === 'TEXTAREA') {
         const text = editableElement.value.substring(selectionStart, selectionEnd);
         const newText = cmd.run(text);
-        const before = editableElement.value.substring(0, selectionStart);
-        const after = editableElement.value.substring(selectionEnd);
-        editableElement.value = before + newText + after;
-        editableElement.selectionStart = editableElement.selectionEnd = selectionStart + newText.length;
+
+        // Use execCommand for proper undo support
         editableElement.focus();
+        editableElement.setSelectionRange(selectionStart, selectionEnd);
+        document.execCommand('insertText', false, newText);
+
+        // Update selection to end of inserted text
+        const newSelectionStart = selectionStart + newText.length;
+        editableElement.setSelectionRange(newSelectionStart, newSelectionStart);
       } else if (editableElement.contentEditable === 'true') {
-        // For contentEditable, use the range
+        // For contentEditable, use execCommand for undo support
         const text = rangeObj.toString();
         const newText = cmd.run(text);
-        rangeObj.deleteContents();
-        rangeObj.insertNode(document.createTextNode(newText));
-        window.getSelection().removeAllRanges();
+
+        // Select the range and use insertText command
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(rangeObj);
+        document.execCommand('insertText', false, newText);
+
+        // Clear selection and focus
+        selection.removeAllRanges();
         editableElement.focus();
       }
     } else {
+      // For non-editable content, use execCommand
       const text = rangeObj.toString();
       const newText = cmd.run(text);
-      rangeObj.deleteContents();
-      rangeObj.insertNode(document.createTextNode(newText));
-      window.getSelection().removeAllRanges();
+
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(rangeObj);
+      document.execCommand('insertText', false, newText);
+
+      // Clear selection
+      selection.removeAllRanges();
     }
 
     localStorage.setItem("tcp:lastCommand", cmd.id);
