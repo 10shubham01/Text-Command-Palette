@@ -220,9 +220,12 @@
   }
 
   function updateActive(items) {
-    items.forEach((el, i) =>
-      el.classList.toggle("active", i === activeIndex)
-    );
+    items.forEach((el, i) => {
+      el.classList.toggle("active", i === activeIndex);
+      if (i === activeIndex) {
+        el.scrollIntoView({ block: "nearest", inline: "nearest" });
+      }
+    });
   }
 
   function fuzzyFilter(query) {
