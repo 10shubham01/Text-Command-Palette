@@ -1,5 +1,4 @@
 (() => {
-  console.log('Text Command Palette loaded');
   if (window.__TEXT_CMD_PALETTE__) return;
   window.__TEXT_CMD_PALETTE__ = true;
 
@@ -36,26 +35,20 @@
   let shadowRoot, paletteEl;
 
   document.addEventListener("keydown", e => {
-    console.log('Keydown:', e.key, e.metaKey, e.shiftKey);
     if (e.metaKey && e.shiftKey && e.key.toLowerCase() === "o") {
-      console.log('Cmd+Shift+O detected');
       e.preventDefault();
       openPalette();
     }
   });
 
   function openPalette() {
-    console.log('openPalette called');
     const activeElement = document.activeElement;
     const isEditable = activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA' || activeElement.contentEditable === 'true');
-    console.log('activeElement:', activeElement, 'isEditable:', isEditable);
 
-    // For debugging, open even without selection
     if (isEditable) {
       if (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA') {
         const start = activeElement.selectionStart;
         const end = activeElement.selectionEnd;
-        console.log('selectionStart:', start, 'selectionEnd:', end);
         if (start !== end) {
           editableElement = activeElement;
           selectionStart = start;
@@ -84,7 +77,6 @@
       }
     } else {
       const sel = window.getSelection();
-      console.log('window.getSelection():', sel);
       if (sel && sel.rangeCount > 0) {
         const range = sel.getRangeAt(0);
         if (!range.collapsed) {
