@@ -32,3 +32,4 @@ VS Code–style command palette for transforming selected text anywhere.
 3. Enable "Developer mode" in the top right
 4. Click "Load unpacked" and select the folder containing `manifest.json`
 5. The extension is now installed and active on all websites
+# Text-Command-Palette
