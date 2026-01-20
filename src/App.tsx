@@ -1,41 +1,90 @@
-import { useState } from 'react'
+import { useState } from "react";
 
 function App() {
-  const [text, setText] = useState('Hello World Example')
+  const [text, setText] = useState("Hello World Example");
   const [commands] = useState([
     { id: "upper", label: "toUpperCase", run: (t: string) => t.toUpperCase() },
     { id: "lower", label: "toLowerCase", run: (t: string) => t.toLowerCase() },
-    { id: "title", label: "toTitleCase", run: (t: string) =>
-        t.replace(/\w\S*/g, w => w[0].toUpperCase() + w.slice(1).toLowerCase())
+    {
+      id: "title",
+      label: "toTitleCase",
+      run: (t: string) =>
+        t.replace(
+          /\w\S*/g,
+          (w) => w[0].toUpperCase() + w.slice(1).toLowerCase(),
+        ),
     },
-    { id: "sentence", label: "toSentenceCase", run: (t: string) =>
-        t.replace(/(^\w|\.\s*\w)/g, c => c.toUpperCase())
+    {
+      id: "sentence",
+      label: "toSentenceCase",
+      run: (t: string) => t.replace(/(^\w|\.\s*\w)/g, (c) => c.toUpperCase()),
     },
-    { id: "camel", label: "toCamelCase", run: (t: string) =>
-        t.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
-          index === 0 ? word.toLowerCase() : word.toUpperCase()
-        ).replace(/\s+/g, '')
+    {
+      id: "camel",
+      label: "toCamelCase",
+      run: (t: string) =>
+        t
+          .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
+            index === 0 ? word.toLowerCase() : word.toUpperCase(),
+          )
+          .replace(/\s+/g, ""),
     },
-    { id: "kebab", label: "toKebabCase", run: (t: string) =>
-        t.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '')
+    {
+      id: "kebab",
+      label: "toKebabCase",
+      run: (t: string) =>
+        t
+          .toLowerCase()
+          .replace(/\s+/g, "-")
+          .replace(/[^\w-]/g, ""),
     },
-    { id: "reverse", label: "Reverse Text", run: (t: string) => t.split('').reverse().join('') },
+    {
+      id: "reverse",
+      label: "Reverse Text",
+      run: (t: string) => t.split("").reverse().join(""),
+    },
     { id: "trim", label: "Trim Whitespace", run: (t: string) => t.trim() },
-    { id: "remove-punct", label: "Remove Punctuation", run: (t: string) => t.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '') },
-    { id: "count-words", label: "Count Words", run: (t: string) => `Words: ${t.trim().split(/\s+/).length}, Characters: ${t.length}` },
-    { id: "copy", label: "Copy to Clipboard", run: (t: string) => { navigator.clipboard.writeText(t); return t; } },
-    { id: "format-date-ist", label: "Format Date to IST", run: (t: string) => {
+    {
+      id: "remove-punct",
+      label: "Remove Punctuation",
+      run: (t: string) => t.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, ""),
+    },
+    {
+      id: "count-words",
+      label: "Count Words",
+      run: (t: string) =>
+        `Words: ${t.trim().split(/\s+/).length}, Characters: ${t.length}`,
+    },
+    {
+      id: "copy",
+      label: "Copy to Clipboard",
+      run: (t: string) => {
+        navigator.clipboard.writeText(t);
+        return t;
+      },
+    },
+    {
+      id: "format-date-ist",
+      label: "Format Date to IST",
+      run: (t: string) => {
         t = t.trim();
-        if (isNaN(Number(t))) return t;
-        const timestamp = parseInt(t);
-        const date = new Date(timestamp);
-        return date.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-    } }
-  ])
+        let date;
+        if (!isNaN(Number(t))) {
+          // Assume milliseconds timestamp
+          date = new Date(parseInt(t));
+        } else {
+          // Try parsing as date string
+          date = new Date(t);
+        }
+        if (isNaN(date.getTime())) return t; // Invalid date
+        return date.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+      },
+    },
+  ]);
 
-  const runCommand = (cmd: typeof commands[0]) => {
-    setText(cmd.run(text))
-  }
+  const runCommand = (cmd: (typeof commands)[0]) => {
+    setText(cmd.run(text));
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -45,11 +94,14 @@ function App() {
             Text Command Palette
           </h1>
           <p className="text-xl text-gray-300 mb-8">
-            VS Code–style command palette for transforming selected text anywhere on the web
+            VS Code–style command palette for transforming selected text
+            anywhere on the web
           </p>
           <div className="bg-gray-800 rounded-lg p-4 inline-block">
             <p className="text-sm text-gray-400">Shortcut:</p>
-            <kbd className="px-2 py-1 bg-gray-700 rounded text-sm">Cmd + Shift + O</kbd>
+            <kbd className="px-2 py-1 bg-gray-700 rounded text-sm">
+              Cmd + Shift + O
+            </kbd>
           </div>
         </div>
 
@@ -80,12 +132,15 @@ function App() {
             <div className="bg-gray-800 p-6 rounded-lg">
               <h3 className="text-xl font-semibold mb-4">Universal Support</h3>
               <p className="text-gray-300">
-                Works on any website with input fields, textareas, and contenteditable elements.
-                Transform text in forms, rich text editors, and more.
+                Works on any website with input fields, textareas, and
+                contenteditable elements. Transform text in forms, rich text
+                editors, and more.
               </p>
             </div>
             <div className="bg-gray-800 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-4">12 Powerful Commands</h3>
+              <h3 className="text-xl font-semibold mb-4">
+                12 Powerful Commands
+              </h3>
               <ul className="text-gray-300 space-y-1">
                 <li>• Case transformations (upper, lower, title, sentence)</li>
                 <li>• Programming formats (camelCase, kebab-case)</li>
@@ -111,16 +166,32 @@ function App() {
 
         <footer className="text-center mt-16 pt-8 border-t border-gray-700">
           <p className="text-gray-400 mb-4">
-            Built by <a href="https://shubhamgupta.dev/" className="text-blue-400 hover:text-blue-300">Shubham Gupta</a>
+            Built by{" "}
+            <a
+              href="https://shubhamgupta.dev/"
+              className="text-blue-400 hover:text-blue-300"
+            >
+              Shubham Gupta
+            </a>
           </p>
           <div className="flex justify-center space-x-4">
-            <a href="https://shubhamgupta.dev/" className="text-gray-400 hover:text-white">Portfolio</a>
-            <a href="https://www.linkedin.com/in/shubhamgupta001/" className="text-gray-400 hover:text-white">LinkedIn</a>
+            <a
+              href="https://shubhamgupta.dev/"
+              className="text-gray-400 hover:text-white"
+            >
+              Portfolio
+            </a>
+            <a
+              href="https://www.linkedin.com/in/shubhamgupta001/"
+              className="text-gray-400 hover:text-white"
+            >
+              LinkedIn
+            </a>
           </div>
         </footer>
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

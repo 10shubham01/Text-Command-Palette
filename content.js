@@ -26,9 +26,15 @@
     { id: "copy", label: "Copy to Clipboard", run: t => { navigator.clipboard.writeText(t); return t; } },
     { id: "format-date-ist", label: "Format Date to IST", run: t => {
         t = t.trim();
-        if (isNaN(t)) return t;
-        const timestamp = parseInt(t);
-        const date = new Date(timestamp);
+        let date;
+        if (!isNaN(t)) {
+          // Assume milliseconds timestamp
+          date = new Date(parseInt(t));
+        } else {
+          // Try parsing as date string
+          date = new Date(t);
+        }
+        if (isNaN(date.getTime())) return t; // Invalid date
         return date.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
     } }
   ];
