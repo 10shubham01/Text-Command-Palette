@@ -23,7 +23,14 @@ function App() {
     { id: "trim", label: "Trim Whitespace", run: (t: string) => t.trim() },
     { id: "remove-punct", label: "Remove Punctuation", run: (t: string) => t.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '') },
     { id: "count-words", label: "Count Words", run: (t: string) => `Words: ${t.trim().split(/\s+/).length}, Characters: ${t.length}` },
-    { id: "copy", label: "Copy to Clipboard", run: (t: string) => { navigator.clipboard.writeText(t); return t; } }
+    { id: "copy", label: "Copy to Clipboard", run: (t: string) => { navigator.clipboard.writeText(t); return t; } },
+    { id: "format-date-ist", label: "Format Date to IST", run: (t: string) => {
+        t = t.trim();
+        if (isNaN(Number(t))) return t;
+        const timestamp = parseInt(t);
+        const date = new Date(timestamp);
+        return date.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+    } }
   ])
 
   const runCommand = (cmd: typeof commands[0]) => {
@@ -55,7 +62,7 @@ function App() {
             className="w-full h-32 p-4 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
           />
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-            {commands.slice(0, 9).map((cmd) => (
+            {commands.slice(0, 12).map((cmd) => (
               <button
                 key={cmd.id}
                 onClick={() => runCommand(cmd)}
@@ -78,13 +85,14 @@ function App() {
               </p>
             </div>
             <div className="bg-gray-800 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-4">11 Powerful Commands</h3>
+              <h3 className="text-xl font-semibold mb-4">12 Powerful Commands</h3>
               <ul className="text-gray-300 space-y-1">
                 <li>• Case transformations (upper, lower, title, sentence)</li>
                 <li>• Programming formats (camelCase, kebab-case)</li>
                 <li>• Text utilities (reverse, trim, remove punctuation)</li>
                 <li>• Analysis tools (word/character count)</li>
                 <li>• Clipboard operations</li>
+                <li>• Date formatting (IST timestamps)</li>
               </ul>
             </div>
           </div>

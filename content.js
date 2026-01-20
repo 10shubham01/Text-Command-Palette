@@ -23,7 +23,14 @@
     { id: "trim", label: "Trim Whitespace", run: t => t.trim() },
     { id: "remove-punct", label: "Remove Punctuation", run: t => t.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '') },
     { id: "count-words", label: "Count Words", run: t => `Words: ${t.trim().split(/\s+/).length}, Characters: ${t.length}` },
-    { id: "copy", label: "Copy to Clipboard", run: t => { navigator.clipboard.writeText(t); return t; } }
+    { id: "copy", label: "Copy to Clipboard", run: t => { navigator.clipboard.writeText(t); return t; } },
+    { id: "format-date-ist", label: "Format Date to IST", run: t => {
+        t = t.trim();
+        if (isNaN(t)) return t;
+        const timestamp = parseInt(t);
+        const date = new Date(timestamp);
+        return date.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+    } }
   ];
 
   let lastCommand = localStorage.getItem("tcp:lastCommand");
@@ -284,7 +291,16 @@
         editableElement.focus();
       }
     } else {
-      // For non-editable content, use execCommand
+      // For non-editable content
+      if (cmd.id === 'format-date-ist') {
+        const text = rangeObj.toString();
+        const newText = cmd.run(text);
+        const input = shadowRoot.querySelector("input");
+        input.value = newText;
+        input.select();
+        localStorage.setItem("tcp:lastCommand", cmd.id);
+        return;
+      }
       const text = rangeObj.toString();
       const newText = cmd.run(text);
 
