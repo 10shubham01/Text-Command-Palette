@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Command Palette</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      textarea {
+        width: 100%;
+        height: 200px;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 20px;
+      }
+      .test-cases {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .test-case {
+        margin-bottom: 15px;
+        padding: 10px;
+        background: #f9f9f9;
+        border-radius: 4px;
+      }
+      .test-case strong {
+        display: block;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Text Command Palette Test</h1>
+    <p>
+      Select text in the textarea below and press <kbd>Ctrl+K</kbd> (or
+      <kbd>Cmd+K</kbd> on Mac) to open the command palette.
+    </p>
+
+    <textarea
+      id="test-textarea"
+      placeholder="Type some text here and select it to test the command palette..."
+    >
+Hello World! This is a test string for the text command palette.
+
+Try selecting different parts of this text and using commands like:
+- toUpperCase
+- toLowerCase
+- toTitleCase
+- toCamelCase
+- toKebabCase
+- Reverse Text
+- Trim Whitespace
+- Remove Punctuation
+- Count Words
+- Copy to Clipboard
+- Format Date to IST (try with: 1640995200000 or "2023-12-25")
+
+Test dates:
+- Timestamp: 1704067200000 (New Year's Day 2024)
+- ISO string: 2024-01-01T00:00:00.000Z
+- Date string: January 1, 2024
+    </textarea>
+
+    <div class="test-cases">
+      <h2>Test Cases</h2>
+      <div class="test-case">
+        <strong>Uppercase:</strong> "hello world" → "HELLO WORLD"
+      </div>
+      <div class="test-case">
+        <strong>Title Case:</strong> "hello world example" → "Hello World
+        Example"
+      </div>
+      <div class="test-case">
+        <strong>Camel Case:</strong> "hello world example" → "helloWorldExample"
+      </div>
+      <div class="test-case">
+        <strong>Kebab Case:</strong> "Hello World Example" →
+        "hello-world-example"
+      </div>
+      <div class="test-case"><strong>Reverse:</strong> "hello" → "olleh"</div>
+      <div class="test-case">
+        <strong>Trim:</strong> " hello world " → "hello world"
+      </div>
+      <div class="test-case">
+        <strong>Remove Punctuation:</strong> "Hello, world!" → "Hello world"
+      </div>
+      <div class="test-case">
+        <strong>Count Words:</strong> "Hello world example" → "Words: 3,
+        Characters: 18"
+      </div>
+      <div class="test-case">
+        <strong>Format Date to IST:</strong> "1704067200000" → "1/1/2024,
+        5:30:00 AM"
+      </div>
+    </div>
+
+    <script src="content.js"></script>
+  </body>
+</html>

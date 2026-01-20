@@ -3,28 +3,28 @@
   window.__TEXT_CMD_PALETTE__ = true;
 
   const COMMANDS = [
-    { id: "upper", label: "toUpperCase", run: t => t.toUpperCase() },
-    { id: "lower", label: "toLowerCase", run: t => t.toLowerCase() },
-    { id: "title", label: "toTitleCase", run: t =>
-        t.replace(/\w\S*/g, w => w[0].toUpperCase() + w.slice(1).toLowerCase())
+    { id: "upper", label: "toUpperCase", icon: '<svg viewBox="0 0 24 24"><polyline points="4,7 4,4 20,4 20,7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>', run: t => t.toUpperCase() },
+    { id: "lower", label: "toLowerCase", icon: '<svg viewBox="0 0 24 24"><polyline points="4,7 4,4 20,4 20,7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>', run: t => t.toLowerCase() },
+    { id: "title", label: "toTitleCase", icon: '<svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14,2 14,8 20,8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>', run: t =>
+        t.replace(/\w\S*/g, w => w[0].toUpperCase() + w.slice(1).toLowerCase()))
     },
-    { id: "sentence", label: "toSentenceCase", run: t =>
+    { id: "sentence", label: "toSentenceCase", icon: '<svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>', run: t =>
         t.replace(/(^\w|\.\s*\w)/g, c => c.toUpperCase())
     },
-    { id: "camel", label: "toCamelCase", run: t =>
+    { id: "camel", label: "toCamelCase", icon: '<svg viewBox="0 0 24 24"><polyline points="16,18 22,12 16,6"></polyline><polyline points="8,6 2,12 8,18"></polyline></svg>', run: t =>
         t.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
           index === 0 ? word.toLowerCase() : word.toUpperCase()
         ).replace(/\s+/g, '')
     },
-    { id: "kebab", label: "toKebabCase", run: t =>
+    { id: "kebab", label: "toKebabCase", icon: '<svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line></svg>', run: t =>
         t.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '')
     },
-    { id: "reverse", label: "Reverse Text", run: t => t.split('').reverse().join('') },
-    { id: "trim", label: "Trim Whitespace", run: t => t.trim() },
-    { id: "remove-punct", label: "Remove Punctuation", run: t => t.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '') },
-    { id: "count-words", label: "Count Words", run: t => `Words: ${t.trim().split(/\s+/).length}, Characters: ${t.length}` },
-    { id: "copy", label: "Copy to Clipboard", run: t => { navigator.clipboard.writeText(t); return t; } },
-    { id: "format-date-ist", label: "Format Date to IST", run: t => {
+    { id: "reverse", label: "Reverse Text", icon: '<svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>', run: t => t.split('').reverse().join('') },
+    { id: "trim", label: "Trim Whitespace", icon: '<svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M20 4L8.12 15.88"></path><path d="M14.47 14.48L20 20"></path><path d="M8.12 8.12L12 12"></path></svg>', run: t => t.trim() },
+    { id: "remove-punct", label: "Remove Punctuation", icon: '<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>', run: t => t.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '') },
+    { id: "count-words", label: "Count Words", icon: '<svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>', run: t => `Words: ${t.trim().split(/\s+/).length}, Characters: ${t.length}` },
+    { id: "copy", label: "Copy to Clipboard", icon: '<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>', run: t => { navigator.clipboard.writeText(t); return t; } },
+    { id: "format-date-ist", label: "Format Date to IST", icon: '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>', run: t => {
         t = t.trim();
         let date;
         if (!isNaN(t)) {
@@ -117,7 +117,8 @@
           left: 0;
           width: 100%;
           height: 100%;
-          background: rgba(0,0,0,0.5);
+          background: rgba(0,0,0,0.6);
+          backdrop-filter: blur(2px);
           z-index: 999998;
         }
         .palette {
@@ -125,44 +126,93 @@
           top: 20%;
           left: 50%;
           transform: translateX(-50%);
-          width: 320px;
-          background: #1e1e1e;
+          width: 400px;
+          max-width: 90vw;
+          background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
           color: white;
-          font-family: system-ui, sans-serif;
-          border-radius: 6px;
-          box-shadow: 0 20px 50px rgba(0,0,0,.6);
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          border-radius: 12px;
+          box-shadow: 0 25px 50px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.1);
           z-index: 999999;
           overflow: hidden;
+          border: 1px solid rgba(255,255,255,0.1);
         }
         .palette input {
           width: 100%;
-          padding: 10px;
-          background: #252526;
+          padding: 16px 20px;
+          background: rgba(255,255,255,0.05);
           border: none;
           color: white;
           outline: none;
-          font-size: 14px;
+          font-size: 16px;
+          border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .palette input::placeholder {
+          color: rgba(255,255,255,0.5);
         }
         .palette ul {
           list-style: none;
           margin: 0;
           padding: 0;
-          max-height: 200px;
+          max-height: 300px;
           overflow-y: auto;
         }
         .palette li {
-          padding: 8px 10px;
+          padding: 12px 20px;
           cursor: pointer;
-          font-size: 14px;
+          font-size: 15px;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          transition: all 0.15s ease;
+        }
+        .palette li .icon {
+          width: 18px;
+          height: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+        .palette li .icon svg {
+          width: 18px;
+          height: 18px;
+          color: inherit;
+          fill: none;
+          stroke: currentColor;
+          stroke-width: 2;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+        .palette li .label {
+          flex: 1;
         }
         .palette li.active,
         .palette li:hover {
-          background: #094771;
+          background: rgba(0, 122, 255, 0.2);
+          color: #ffffff;
+        }
+        .palette li.active {
+          background: rgba(0, 122, 255, 0.3);
+          box-shadow: inset 0 0 0 1px rgba(0, 122, 255, 0.5);
+        }
+        .palette::-webkit-scrollbar {
+          width: 6px;
+        }
+        .palette::-webkit-scrollbar-track {
+          background: rgba(255,255,255,0.05);
+        }
+        .palette::-webkit-scrollbar-thumb {
+          background: rgba(255,255,255,0.3);
+          border-radius: 3px;
+        }
+        .palette::-webkit-scrollbar-thumb:hover {
+          background: rgba(255,255,255,0.5);
         }
       </style>
       <div class="backdrop"></div>
       <div class="palette">
-        <input placeholder="Type a command…" />
+        <input placeholder="Type a command or search…" />
         <ul></ul>
       </div>
     `;
@@ -225,7 +275,7 @@
 
     sortedCmds.forEach(cmd => {
       const li = document.createElement("li");
-      li.textContent = cmd.label;
+      li.innerHTML = `<span class="icon">${cmd.icon}</span><span class="label">${cmd.label}</span>`;
       li.onclick = () => run(cmd);
       list.appendChild(li);
     });
