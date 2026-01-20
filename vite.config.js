@@ -20,6 +20,10 @@ export default defineConfig({
         {
           src: 'style.css',
           dest: '.'
+        },
+        {
+          src: 'icon.png',
+          dest: '.'
         }
       ]
     })

@@ -6,7 +6,7 @@
     { id: "upper", label: "toUpperCase", icon: '<svg viewBox="0 0 24 24"><polyline points="4,7 4,4 20,4 20,7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>', run: t => t.toUpperCase() },
     { id: "lower", label: "toLowerCase", icon: '<svg viewBox="0 0 24 24"><polyline points="4,7 4,4 20,4 20,7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>', run: t => t.toLowerCase() },
     { id: "title", label: "toTitleCase", icon: '<svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14,2 14,8 20,8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>', run: t =>
-        t.replace(/\w\S*/g, w => w[0].toUpperCase() + w.slice(1).toLowerCase()))
+        t.replace(/\w\S*/g, w => w[0].toUpperCase() + w.slice(1).toLowerCase())
     },
     { id: "sentence", label: "toSentenceCase", icon: '<svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>', run: t =>
         t.replace(/(^\w|\.\s*\w)/g, c => c.toUpperCase())
@@ -47,8 +47,23 @@
   let rangeObj = null;
   let shadowRoot, paletteEl;
 
+  // Default shortcut: Cmd+Shift+O on Mac, Ctrl+Shift+O on other platforms
+  const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+  const currentShortcut = {
+    ctrlKey: !isMac,
+    metaKey: isMac,
+    shiftKey: true,
+    key: 'o'
+  };
+
+  // Listen for keyboard shortcuts
   document.addEventListener("keydown", e => {
-    if (e.metaKey && e.shiftKey && e.key.toLowerCase() === "o") {
+    if (!currentShortcut) return;
+
+    if (e.ctrlKey === currentShortcut.ctrlKey &&
+        e.metaKey === currentShortcut.metaKey &&
+        e.shiftKey === currentShortcut.shiftKey &&
+        e.key.toLowerCase() === currentShortcut.key) {
       e.preventDefault();
       openPalette();
     }
@@ -117,8 +132,8 @@
           left: 0;
           width: 100%;
           height: 100%;
-          background: rgba(0,0,0,0.6);
-          backdrop-filter: blur(2px);
+          background: rgba(0,0,0,0.09);
+          backdrop-filter: blur(1px);
           z-index: 999998;
         }
         .palette {
