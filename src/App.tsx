@@ -1,91 +1,6 @@
-import { useState } from "react";
+import { commands } from "./commands";
 
 function App() {
-  const [text, setText] = useState("Hello World Example");
-  const [commands] = useState([
-    { id: "upper", label: "toUpperCase", run: (t: string) => t.toUpperCase() },
-    { id: "lower", label: "toLowerCase", run: (t: string) => t.toLowerCase() },
-    {
-      id: "title",
-      label: "toTitleCase",
-      run: (t: string) =>
-        t.replace(
-          /\w\S*/g,
-          (w) => w[0].toUpperCase() + w.slice(1).toLowerCase(),
-        ),
-    },
-    {
-      id: "sentence",
-      label: "toSentenceCase",
-      run: (t: string) => t.replace(/(^\w|\.\s*\w)/g, (c) => c.toUpperCase()),
-    },
-    {
-      id: "camel",
-      label: "toCamelCase",
-      run: (t: string) =>
-        t
-          .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
-            index === 0 ? word.toLowerCase() : word.toUpperCase(),
-          )
-          .replace(/\s+/g, ""),
-    },
-    {
-      id: "kebab",
-      label: "toKebabCase",
-      run: (t: string) =>
-        t
-          .toLowerCase()
-          .replace(/\s+/g, "-")
-          .replace(/[^\w-]/g, ""),
-    },
-    {
-      id: "reverse",
-      label: "Reverse Text",
-      run: (t: string) => t.split("").reverse().join(""),
-    },
-    { id: "trim", label: "Trim Whitespace", run: (t: string) => t.trim() },
-    {
-      id: "remove-punct",
-      label: "Remove Punctuation",
-      run: (t: string) => t.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, ""),
-    },
-    {
-      id: "count-words",
-      label: "Count Words",
-      run: (t: string) =>
-        `Words: ${t.trim().split(/\s+/).length}, Characters: ${t.length}`,
-    },
-    {
-      id: "copy",
-      label: "Copy to Clipboard",
-      run: (t: string) => {
-        navigator.clipboard.writeText(t);
-        return t;
-      },
-    },
-    {
-      id: "format-date-ist",
-      label: "Format Date to IST",
-      run: (t: string) => {
-        t = t.trim();
-        let date;
-        if (!isNaN(Number(t))) {
-          // Assume milliseconds timestamp
-          date = new Date(parseInt(t));
-        } else {
-          // Try parsing as date string
-          date = new Date(t);
-        }
-        if (isNaN(date.getTime())) return t; // Invalid date
-        return date.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
-      },
-    },
-  ]);
-
-  const runCommand = (cmd: (typeof commands)[0]) => {
-    setText(cmd.run(text));
-  };
-
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-16">
@@ -105,27 +20,6 @@ function App() {
           </div>
         </div>
 
-        <div className="max-w-2xl mx-auto mb-16">
-          <h2 className="text-2xl font-semibold mb-4">Try it out:</h2>
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Enter text here..."
-            className="w-full h-32 p-4 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-          />
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-            {commands.slice(0, 12).map((cmd) => (
-              <button
-                key={cmd.id}
-                onClick={() => runCommand(cmd)}
-                className="px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded text-sm transition-colors"
-              >
-                {cmd.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-semibold mb-8 text-center">Features</h2>
           <div className="grid md:grid-cols-2 gap-8">
@@ -139,7 +33,7 @@ function App() {
             </div>
             <div className="bg-gray-800 p-6 rounded-lg">
               <h3 className="text-xl font-semibold mb-4">
-                12 Powerful Commands
+                {commands.length} Powerful Commands
               </h3>
               <ul className="text-gray-300 space-y-1">
                 <li>• Case transformations (upper, lower, title, sentence)</li>

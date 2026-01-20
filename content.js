@@ -268,59 +268,64 @@
   }
 
   function run(cmd) {
-    if (editableElement) {
-      if (editableElement.tagName === 'INPUT' || editableElement.tagName === 'TEXTAREA') {
-        const text = editableElement.value.substring(selectionStart, selectionEnd);
-        const newText = cmd.run(text);
+    try {
+      if (editableElement) {
+        if (editableElement.tagName === 'INPUT' || editableElement.tagName === 'TEXTAREA') {
+          const text = editableElement.value.substring(selectionStart, selectionEnd);
+          const newText = cmd.run(text);
 
-        // Use execCommand for proper undo support
-        editableElement.focus();
-        editableElement.setSelectionRange(selectionStart, selectionEnd);
-        document.execCommand('insertText', false, newText);
+          // Use execCommand for proper undo support
+          editableElement.focus();
+          editableElement.setSelectionRange(selectionStart, selectionEnd);
+          document.execCommand('insertText', false, newText);
 
-        // Update selection to end of inserted text
-        const newSelectionStart = selectionStart + newText.length;
-        editableElement.setSelectionRange(newSelectionStart, newSelectionStart);
-      } else if (editableElement.contentEditable === 'true') {
-        // For contentEditable, use execCommand for undo support
+          // Update selection to end of inserted text
+          const newSelectionStart = selectionStart + newText.length;
+          editableElement.setSelectionRange(newSelectionStart, newSelectionStart);
+        } else if (editableElement.contentEditable === 'true') {
+          // For contentEditable, use execCommand for undo support
+          const text = rangeObj.toString();
+          const newText = cmd.run(text);
+
+          // Select the range and use insertText command
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(rangeObj);
+          document.execCommand('insertText', false, newText);
+
+          // Clear selection and focus
+          selection.removeAllRanges();
+          editableElement.focus();
+        }
+      } else {
+        // For non-editable content
+        if (cmd.id === 'format-date-ist') {
+          const text = rangeObj.toString();
+          const newText = cmd.run(text);
+          const input = shadowRoot.querySelector("input");
+          input.value = newText;
+          input.select();
+          localStorage.setItem("tcp:lastCommand", cmd.id);
+          return;
+        }
         const text = rangeObj.toString();
         const newText = cmd.run(text);
 
-        // Select the range and use insertText command
         const selection = window.getSelection();
         selection.removeAllRanges();
         selection.addRange(rangeObj);
         document.execCommand('insertText', false, newText);
 
-        // Clear selection and focus
+        // Clear selection
         selection.removeAllRanges();
-        editableElement.focus();
       }
-    } else {
-      // For non-editable content
-      if (cmd.id === 'format-date-ist') {
-        const text = rangeObj.toString();
-        const newText = cmd.run(text);
-        const input = shadowRoot.querySelector("input");
-        input.value = newText;
-        input.select();
-        localStorage.setItem("tcp:lastCommand", cmd.id);
-        return;
-      }
-      const text = rangeObj.toString();
-      const newText = cmd.run(text);
 
-      const selection = window.getSelection();
-      selection.removeAllRanges();
-      selection.addRange(rangeObj);
-      document.execCommand('insertText', false, newText);
-
-      // Clear selection
-      selection.removeAllRanges();
+      localStorage.setItem("tcp:lastCommand", cmd.id);
+      closePalette();
+    } catch (error) {
+      console.error('Error running command:', error);
+      closePalette();
     }
-
-    localStorage.setItem("tcp:lastCommand", cmd.id);
-    closePalette();
   }
 
   function closePalette() {
